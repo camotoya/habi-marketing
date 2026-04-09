@@ -1,31 +1,7 @@
 'use client';
-import Image from 'next/image';
 import { useState } from 'react';
-
-// ── Header ──
-const NAV_ITEMS = [
-  { id: 'vender', label: 'Vender', href: '/vender' },
-  { id: 'comprar', label: 'Comprar', href: '/comprar' },
-  { id: 'broker', label: 'Soy Broker', href: '/broker' },
-  { id: 'cuanto', label: '¿Cuánto cuesta mi vivienda?', href: '/cuanto-cuesta' },
-];
-
-function Header() {
-  return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
-      <div className="mx-auto max-w-[1200px] px-4 sm:px-6 py-4 flex items-center justify-between">
-        <Image src="/logo-habi.png" alt="Habi" width={128} height={36} className="h-10 w-auto" priority />
-        <nav className="hidden md:flex items-center gap-1">
-          {NAV_ITEMS.map(item => (
-            <a key={item.id} href={item.href} className="px-4 py-2 rounded-full text-[15px] font-medium text-gray-600 hover:text-purple-700 hover:bg-purple-50 transition-all">
-              {item.label}
-            </a>
-          ))}
-        </nav>
-      </div>
-    </header>
-  );
-}
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 // ── Product Cards ──
 const PRODUCTS = [
@@ -98,53 +74,6 @@ const TESTIMONIALS = [
   { name: 'Ana Martínez', title: 'Compró en Cali', text: 'Encontré mi apartamento ideal en el inventario de Habi. Las fotos eran exactas y la asesoría fue increíble.' },
 ];
 
-// ── Footer ──
-const FOOTER_COLS = [
-  { title: 'Vender', links: [{ label: 'Vende en 10 días', href: '/vender' }, { label: 'Vende con brokers', href: '/vender' }, { label: '¿Cuánto vale mi casa?', href: '/cuanto-cuesta' }, { label: 'Proceso de venta', href: '#' }] },
-  { title: 'Comprar', links: [{ label: 'Ver propiedades', href: '/comprar' }, { label: 'Apartamentos en Bogotá', href: '/comprar' }, { label: 'Casas en Medellín', href: '/comprar' }, { label: 'Crédito hipotecario', href: '/credito' }] },
-  { title: 'Empresa', links: [{ label: 'Sobre nosotros', href: '#' }, { label: 'Blog', href: '#' }, { label: 'Trabaja con nosotros', href: '#' }, { label: 'Soy Broker', href: '/broker' }] },
-  { title: 'Legal', links: [{ label: 'Términos y condiciones', href: '#' }, { label: 'Política de privacidad', href: '#' }, { label: 'Política de cookies', href: '#' }, { label: 'PQRS', href: '#' }] },
-];
-const CITIES = ['Bogotá', 'Medellín', 'Cali', 'Barranquilla', 'Bucaramanga', 'Cartagena', 'Pereira', 'Armenia', 'Soacha', 'Envigado', 'Bello', 'Itagüí', 'Sabaneta', 'Chía'];
-
-function Footer() {
-  return (
-    <footer className="bg-gray-900 text-gray-400 pt-16 pb-8">
-      <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-          {FOOTER_COLS.map(col => (
-            <div key={col.title}>
-              <h4 className="text-white font-semibold text-[15px] mb-4">{col.title}</h4>
-              <ul className="space-y-2.5">
-                {col.links.map(l => (
-                  <li key={l.label}><a href={l.href} className="text-[14px] hover:text-white transition-colors">{l.label}</a></li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-        <div className="border-t border-gray-800 pt-8 mb-8">
-          <h4 className="text-white font-semibold text-[14px] mb-3">Ciudades donde operamos</h4>
-          <div className="flex flex-wrap gap-2">
-            {CITIES.map(c => (<span key={c} className="text-[12px] px-3 py-1 rounded-full bg-gray-800 text-gray-400">{c}</span>))}
-          </div>
-        </div>
-        <div className="border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <Image src="/logo-habi.png" alt="Habi" width={80} height={22} className="h-6 w-auto brightness-0 invert opacity-50" />
-            <p className="text-[12px] text-gray-500">© {new Date().getFullYear()} Habi. Todos los derechos reservados.</p>
-          </div>
-          <div className="flex items-center gap-4">
-            {['Instagram', 'Facebook', 'YouTube', 'LinkedIn'].map(s => (
-              <a key={s} href="#" className="text-[12px] text-gray-500 hover:text-white transition-colors">{s}</a>
-            ))}
-          </div>
-        </div>
-        <p className="text-[11px] text-gray-600 text-center mt-6">Los valores estimados se basan en datos del mercado y no constituyen un avalúo comercial certificado. Habi S.A.S. NIT 901.163.846-0.</p>
-      </div>
-    </footer>
-  );
-}
 
 // ── Main Page ──
 export default function Home() {

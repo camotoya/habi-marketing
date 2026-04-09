@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -67,17 +67,39 @@ const STATS = [
   { value: '10 días', label: 'Tiempo de compra directa' },
 ];
 
-// ── Testimonials (placeholder — will connect to CMS Strapi) ──
-const TESTIMONIALS = [
-  { name: 'María González', title: 'Vendió en Bogotá', text: 'Vendí mi apartamento en solo 12 días. El proceso fue transparente y el equipo de Habi me acompañó en cada paso.' },
-  { name: 'Carlos Rodríguez', title: 'Vendió en Medellín', text: 'La oferta de Habi fue justa y el dinero llegó rapidísimo. No tuve que lidiar con intermediarios ni visitas eternas.' },
-  { name: 'Ana Martínez', title: 'Compró en Cali', text: 'Encontré mi apartamento ideal en el inventario de Habi. Las fotos eran exactas y la asesoría fue increíble.' },
+// ── Testimonials ──
+// TODO: Connect to CMS Strapi when available (endpoint: components?component_name=venta_testimonials)
+const TESTIMONIALS_VENTA = [
+  { name: 'María González', title: 'Vendió su apartamento en Bogotá', text: 'Vendí mi apartamento en solo 12 días. El proceso fue transparente y el equipo de Habi me acompañó en cada paso. Nunca pensé que vender fuera tan fácil.', city: 'Bogotá' },
+  { name: 'Carlos Rodríguez', title: 'Vendió su casa en Medellín', text: 'La oferta de Habi fue justa y el dinero llegó rapidísimo. No tuve que lidiar con intermediarios ni visitas eternas. 100% recomendado.', city: 'Medellín' },
+  { name: 'Laura Sánchez', title: 'Vendió con la red de brokers', text: 'Decidí vender con la red de brokers de Habi y en menos de un mes ya tenía comprador. El acompañamiento fue excepcional de principio a fin.', city: 'Barranquilla' },
+  { name: 'Andrés Mejía', title: 'Vendió su apartamento en Envigado', text: 'Habi me dio una oferta en 48 horas. El proceso de venta fue impecable, desde la evaluación hasta la escrituración. Muy profesionales.', city: 'Envigado' },
+];
+const TESTIMONIALS_COMPRA = [
+  { name: 'Ana Martínez', title: 'Compró en Cali', text: 'Encontré mi apartamento ideal en el inventario de Habi. Las fotos eran exactas, la información completa y la asesoría fue increíble.', city: 'Cali' },
+  { name: 'Diego Torres', title: 'Compró en Bogotá', text: 'El proceso de compra fue muy ágil. Habi me ayudó con todo el papeleo y encontré exactamente lo que buscaba en mi presupuesto.', city: 'Bogotá' },
+  { name: 'Valentina Ruiz', title: 'Compró en Soacha', text: 'Gracias a Habi conseguí mi primer apartamento. El crédito hipotecario que me ayudaron a gestionar tenía la mejor tasa del mercado.', city: 'Soacha' },
 ];
 
 
 // ── Main Page ──
 export default function Home() {
+  const [testimonialTab, setTestimonialTab] = useState<'venta' | 'compra'>('venta');
   const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const testimonials = testimonialTab === 'venta' ? TESTIMONIALS_VENTA : TESTIMONIALS_COMPRA;
+
+  // Auto-advance testimonials
+  const nextTestimonial = useCallback(() => {
+    setActiveTestimonial(prev => (prev + 1) % testimonials.length);
+  }, [testimonials.length]);
+
+  useEffect(() => {
+    const timer = setInterval(nextTestimonial, 5000);
+    return () => clearInterval(timer);
+  }, [nextTestimonial]);
+
+  // Reset index when switching tabs
+  useEffect(() => { setActiveTestimonial(0); }, [testimonialTab]);
 
   return (
     <>
@@ -127,20 +149,66 @@ export default function Home() {
       {/* Testimonials */}
       <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <h2 className="font-[family-name:var(--font-heading)] font-bold text-3xl sm:text-4xl text-gray-900 mb-4">Lo que dicen nuestros clientes</h2>
             <p className="text-[16px] text-gray-500 max-w-xl mx-auto">Miles de personas ya han confiado en Habi para tomar sus decisiones inmobiliarias.</p>
           </div>
+
+          {/* Tabs venta/compra */}
+          <div className="flex justify-center gap-2 mb-8">
+            <button
+              onClick={() => setTestimonialTab('venta')}
+              className={`px-6 py-2.5 rounded-full text-[15px] font-medium transition-all ${testimonialTab === 'venta' ? 'bg-purple-600 text-white shadow-lg shadow-purple-200' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
+            >
+              Vendedores
+            </button>
+            <button
+              onClick={() => setTestimonialTab('compra')}
+              className={`px-6 py-2.5 rounded-full text-[15px] font-medium transition-all ${testimonialTab === 'compra' ? 'bg-purple-600 text-white shadow-lg shadow-purple-200' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
+            >
+              Compradores
+            </button>
+          </div>
+
+          {/* Testimonial card */}
           <div className="max-w-2xl mx-auto">
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center">
-              <p className="text-[18px] text-gray-700 leading-relaxed mb-6 italic">&ldquo;{TESTIMONIALS[activeTestimonial].text}&rdquo;</p>
-              <p className="font-semibold text-[16px] text-gray-900">{TESTIMONIALS[activeTestimonial].name}</p>
-              <p className="text-[14px] text-gray-400">{TESTIMONIALS[activeTestimonial].title}</p>
+            <div className="bg-white rounded-2xl p-8 sm:p-10 shadow-sm border border-gray-100 text-center relative overflow-hidden">
+              <div className="text-5xl text-purple-100 font-serif absolute top-4 left-6">&ldquo;</div>
+              <p className="text-[18px] text-gray-700 leading-relaxed mb-6 relative z-10">
+                {testimonials[activeTestimonial]?.text}
+              </p>
+              <div className="flex items-center justify-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center text-white font-bold text-[16px]">
+                  {testimonials[activeTestimonial]?.name.charAt(0)}
+                </div>
+                <div className="text-left">
+                  <p className="font-semibold text-[16px] text-gray-900">{testimonials[activeTestimonial]?.name}</p>
+                  <p className="text-[13px] text-gray-400">{testimonials[activeTestimonial]?.title}</p>
+                </div>
+              </div>
             </div>
-            <div className="flex justify-center gap-2 mt-6">
-              {TESTIMONIALS.map((_, i) => (
-                <button key={i} onClick={() => setActiveTestimonial(i)} aria-label={`Ver testimonio ${i + 1} de ${TESTIMONIALS.length}`} className={`w-3 h-3 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${i === activeTestimonial ? 'bg-purple-600 w-8' : 'bg-gray-300 hover:bg-gray-400'}`} />
-              ))}
+
+            {/* Dots + arrows */}
+            <div className="flex items-center justify-center gap-4 mt-6">
+              <button
+                onClick={() => setActiveTestimonial(prev => (prev - 1 + testimonials.length) % testimonials.length)}
+                aria-label="Testimonio anterior"
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+              >
+                <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+              </button>
+              <div className="flex gap-2">
+                {testimonials.map((_, i) => (
+                  <button key={i} onClick={() => setActiveTestimonial(i)} aria-label={`Ver testimonio ${i + 1} de ${testimonials.length}`} className={`h-2.5 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${i === activeTestimonial ? 'bg-purple-600 w-8' : 'bg-gray-300 hover:bg-gray-400 w-2.5'}`} />
+                ))}
+              </div>
+              <button
+                onClick={nextTestimonial}
+                aria-label="Siguiente testimonio"
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+              >
+                <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+              </button>
             </div>
           </div>
         </div>

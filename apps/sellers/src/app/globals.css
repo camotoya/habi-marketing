@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-purple-600: #7C01FF;
+  --color-purple-700: #5A00CC;
+  --color-purple-800: #3D0099;
+  --color-purple-50: #F7F6FF;
+  --color-purple-100: #EDE0FF;
+  --color-teal-500: #00C29C;
+  --color-teal-600: #009B7D;
+  --color-teal-50: #E0FFF7;
+  --font-sans: var(--font-sans);
+  --font-heading: var(--font-heading);
+}
+
+html { scroll-behavior: smooth; }
+::selection { background-color: rgba(124, 1, 255, 0.15); }

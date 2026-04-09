@@ -9,7 +9,13 @@ const initialFormData: FormData = {
   age: 0, stratum: 4, elevator: 1, balcony: 0, terrace: 0,
   storage: 0, doorman: 0, remodeled: 0, floor: 3, view: 'Interna',
   name: '', email: '', phone: '', intent: 'vender',
-};
+  // Complementary (step 5)
+  askPrice: 0, mortgaged: 0, parkingType: 'privado',
+  greenZone: 0, childrenZone: 0, bbq: 0, pool: 0, gym: 0,
+  laundryRoom: 0, wetZones: 0, communalRoom: 0,
+  // Exit poll (step 6)
+  saleReason: '', saleTimeMonths: 0,
+} as FormData;
 
 const initialApiState: ApiState = {
   cities: [], georef: null, catastral: null, daneCode: null,

@@ -147,6 +147,21 @@ export interface FormData {
   email: string;
   phone: string;
   intent: string;
+  // Complementary
+  askPrice: number;
+  mortgaged: number;
+  parkingType: string;
+  greenZone: number;
+  childrenZone: number;
+  bbq: number;
+  pool: number;
+  gym: number;
+  laundryRoom: number;
+  wetZones: number;
+  communalRoom: number;
+  // Exit poll
+  saleReason: string;
+  saleTimeMonths: number;
 }
 
 export interface ApiState {

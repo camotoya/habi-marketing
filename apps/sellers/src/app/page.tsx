@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useCallback, useRef, useState } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { useFormState } from '@/hooks/useFormState';
 import * as api from '@/lib/api';
@@ -13,6 +13,8 @@ import StepCatastral from '@/components/form/StepCatastral';
 import StepCharacteristics from '@/components/form/StepCharacteristics';
 import StepDetails from '@/components/form/StepDetails';
 import StepContact from '@/components/form/StepContact';
+import StepComplementary from '@/components/form/StepComplementary';
+import StepExitPoll from '@/components/form/StepExitPoll';
 
 import ResultCards from '@/components/panel/ResultCards';
 
@@ -23,15 +25,20 @@ const PriceChart = dynamic(() => import('@/components/results/PriceChart'), { ss
 import CostsTable from '@/components/results/CostsTable';
 import ResultsCTA from '@/components/results/ResultsCTA';
 
+// Steps 1-4 are obligatory (before lead creation)
+// Steps 5-6 are optional (after lead creation)
 const STEPS = [
-  { label: 'Ubicaci\u00f3n' },
-  { label: 'Caracter\u00edsticas' },
+  { label: 'Ubicación' },
+  { label: 'Características' },
   { label: 'Detalles' },
   { label: 'Tus datos' },
+  { label: 'Complemento' },
+  { label: 'Encuesta' },
 ];
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 6;
+const SUBMIT_STEP = 4; // Lead is created at step 4
 
-export default function Home() {
+export default function SellersPage() {
   const {
     formData, updateForm, apiState, updateApi,
     currentStep, setCurrentStep,
@@ -39,10 +46,8 @@ export default function Home() {
     showResults, setShowResults, reset,
   } = useFormState();
 
-  const [activeTab, setActiveTab] = useState('vender');
-
-  // Track last fetched address to detect changes
   const lastFetchedAddress = useRef('');
+  const leadCreated = useRef(false);
 
   useEffect(() => {
     api.getCities().then(cities => updateApi({ cities })).catch(console.error);
@@ -55,19 +60,14 @@ export default function Home() {
     && formData.num2 && numRegex.test(formData.num2)
     && formData.num3 && numRegex.test(formData.num3));
 
-  // Step 1 complete -> georef + catastral + POIs + DANE + median zone
+  // Step 1 complete → georef + catastral + POIs + DANE + median zone
   const onStep1Complete = useCallback(async () => {
     if (!formData.address || !formData.city) return;
-
-    // If address changed, clear previous results
     const addressKey = `${formData.city}|${formData.address}|${formData.propertyType}`;
     if (addressKey !== lastFetchedAddress.current) {
       updateApi({ georef: null, catastral: null, pois: null, daneCode: null, medianZone: null, discarded: null });
       lastFetchedAddress.current = addressKey;
-    } else {
-      // Same address, no need to re-fetch
-      return;
-    }
+    } else return;
 
     try {
       const georef = await api.getGeoref(formData.address, formData.city, formData.propertyType);
@@ -85,7 +85,7 @@ export default function Home() {
     } catch (e) { console.error('Georef failed:', e); }
   }, [formData.address, formData.city, formData.propertyType, updateApi]);
 
-  // Step 2 complete -> check discarded
+  // Step 2 complete → check discarded
   const onStep2Complete = useCallback(async () => {
     const geo = apiState.georef;
     if (!geo || !formData.area) return;
@@ -100,11 +100,11 @@ export default function Home() {
     } catch (e) { console.error('Discarded failed:', e); }
   }, [apiState.georef, formData, updateApi]);
 
-  // Submit
+  // Submit — creates lead + gets avalúo (step 4)
   const onSubmit = useCallback(async () => {
     setLoading(true);
     setLoadingMsg('Registrando tu inmueble...');
-    const msgs = ['Analizando ubicaci\u00f3n...', 'Consultando mercado...', 'Comparando inmuebles...', 'Calculando costos...', 'Generando reporte...'];
+    const msgs = ['Analizando ubicación...', 'Consultando mercado...', 'Comparando inmuebles...', 'Calculando costos...', 'Generando reporte...'];
     let i = 0;
     const iv = setInterval(() => { if (++i < msgs.length) setLoadingMsg(msgs[i]); }, 800);
     try {
@@ -115,7 +115,7 @@ export default function Home() {
         area: formData.area || 80, banos: formData.bathrooms, estrato: formData.stratum,
         garajes: formData.garages, num_habitaciones: formData.rooms, anos_antiguedad: formData.age,
         fuente_id: 7, tipo_inmueble_id: formData.propertyType, tipo_negocio_id: 1,
-        ask_price: 0, terms_accepted: true,
+        ask_price: formData.askPrice || 0, terms_accepted: true,
         blacklist: 0, fuera_de_la_zona: 0, descartado_por_inmueble: 0,
         descartado_por_ultimo_piso_sin_ascensor: 0, descartado_por_antiguedad: 0,
         nombre_o_inmobiliaria: formData.name || 'Habi User', telefono: formData.phone || '',
@@ -137,16 +137,17 @@ export default function Home() {
       updateApi({ habimetro: result });
       clearInterval(iv);
       setLoading(false);
-      setShowResults(true);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      leadCreated.current = true;
+      // Move to step 5 (complementary) instead of showing results
+      setCurrentStep(5);
     } catch (e) {
       clearInterval(iv);
       setLoading(false);
-      alert('El servicio de generaci\u00f3n de resultados no est\u00e1 disponible en este momento. El endpoint POST habimetro requiere una API key que necesita ser configurada. Contacta al equipo de backend.\n\nError: ' + (e as Error).message);
+      alert('El servicio no está disponible. Contacta al equipo de backend.\n\nError: ' + (e as Error).message);
     }
-  }, [formData, apiState, updateApi, setLoading, setLoadingMsg, setShowResults]);
+  }, [formData, apiState, updateApi, setLoading, setLoadingMsg, setCurrentStep]);
 
-  // Navigation - free back/forward, re-fetch on step 1 if address changed
+  // Navigation
   const goNext = async () => {
     if (currentStep === 1) await onStep1Complete();
     if (currentStep === 2) await onStep2Complete();
@@ -154,11 +155,21 @@ export default function Home() {
   };
   const goBack = () => {
     if (currentStep > 1) {
-      // If going back to step 1, invalidate address cache so re-fetch happens on changes
       if (currentStep === 2) lastFetchedAddress.current = '';
+      // Don't go back past step 4 if lead was already created
+      if (leadCreated.current && currentStep <= 5) return;
       setCurrentStep(currentStep - 1);
     }
   };
+  const finishForm = () => {
+    setShowResults(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Button helpers
+  const btnPrimary = "flex-1 py-3.5 rounded-full font-semibold text-white bg-purple-600 hover:bg-purple-700 transition-all shadow-lg shadow-purple-200";
+  const btnBack = "px-4 py-3 text-gray-500 hover:text-purple-600 font-medium";
+  const btnSkip = "px-4 py-3 text-gray-400 hover:text-gray-600 font-medium text-[14px]";
 
   // ── Loading ──
   if (loading) return (
@@ -186,7 +197,7 @@ export default function Home() {
             <PropertyTags formData={formData} />
           </div>
           <div className="bg-white rounded-2xl p-6 shadow-sm">
-            <h3 className="font-[family-name:var(--font-heading)] font-bold mb-4">Hist\u00f3rico de precios</h3>
+            <h3 className="font-[family-name:var(--font-heading)] font-bold mb-4">Histórico de precios</h3>
             <div className="h-[240px]"><PriceChart ventaData={vH} arriendoData={aH} /></div>
           </div>
           <div className="bg-white rounded-2xl p-6 shadow-sm">
@@ -199,50 +210,39 @@ export default function Home() {
     );
   }
 
-  // ── Form (single column, centered) ──
+  // ── Form ──
   return (
     <main className="max-w-3xl mx-auto px-4 py-8 space-y-6">
-      {/* Form card */}
       <div className="bg-white rounded-2xl p-5 sm:p-7 shadow-sm">
         <ProgressBar step={currentStep} totalSteps={TOTAL_STEPS} />
         <StepsNav currentStep={currentStep} totalSteps={TOTAL_STEPS} steps={STEPS} />
 
-        {/* Step 1: Ubicaci\u00f3n */}
+        {/* Step 1: Ubicación */}
         {currentStep === 1 && (
           <div className="space-y-5">
-            <h2 className="font-[family-name:var(--font-heading)] font-bold text-[22px]">Cu\u00e9ntanos sobre tu inmueble</h2>
+            <h2 className="font-[family-name:var(--font-heading)] font-bold text-[22px]">Cuéntanos sobre tu inmueble</h2>
             <PropertyTypeSelector value={formData.propertyType} onChange={v => updateForm({ propertyType: v })} />
             <CityAndAddress
-              cities={apiState.cities}
-              cityValue={formData.city}
+              cities={apiState.cities} cityValue={formData.city}
               onCityChange={c => updateForm({ city: c.name, cityName: c.label, cityId: c.id })}
-              tipoVia={formData.tipoVia}
-              num1={formData.num1}
-              num2={formData.num2}
-              num3={formData.num3}
-              address={formData.address}
-              onAddressChange={(f, v) => updateForm({ [f]: v })}
+              tipoVia={formData.tipoVia} num1={formData.num1} num2={formData.num2} num3={formData.num3}
+              address={formData.address} onAddressChange={(f, v) => updateForm({ [f]: v })}
             />
-            <button onClick={goNext} disabled={!step1Valid} className="w-full py-3.5 rounded-full font-semibold text-white bg-purple-600 hover:bg-purple-700 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed transition-all shadow-lg shadow-purple-200 disabled:shadow-none">Continuar</button>
+            <button onClick={goNext} disabled={!step1Valid} className={`w-full py-3.5 rounded-full font-semibold text-white bg-purple-600 hover:bg-purple-700 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed transition-all shadow-lg shadow-purple-200 disabled:shadow-none`}>Continuar</button>
           </div>
         )}
 
-        {/* Step 2: Caracter\u00edsticas */}
+        {/* Step 2: Características */}
         {currentStep === 2 && (
           <div className="space-y-5">
-            <h2 className="font-[family-name:var(--font-heading)] font-bold text-[22px]">Caracter\u00edsticas de tu inmueble</h2>
+            <h2 className="font-[family-name:var(--font-heading)] font-bold text-[22px]">Características de tu inmueble</h2>
             {apiState.catastral && (formData.propertyType === 1 || formData.propertyType === 3) && (
-              <StepCatastral
-                catastral={apiState.catastral}
-                propertyType={formData.propertyType}
-                project={apiState.georef?.project || ''}
-                onSelectUnit={(u, a) => updateForm({ unit: u, ...(a ? { area: a } : {}) })}
-              />
+              <StepCatastral catastral={apiState.catastral} propertyType={formData.propertyType} project={apiState.georef?.project || ''} onSelectUnit={(u, a) => updateForm({ unit: u, ...(a ? { area: a } : {}) })} />
             )}
             <StepCharacteristics formData={formData} onChange={(f, v) => updateForm({ [f]: v })} />
             <div className="flex gap-3">
-              <button onClick={goBack} className="px-4 py-3 text-gray-500 hover:text-purple-600 font-medium">Atr\u00e1s</button>
-              <button onClick={goNext} className="flex-1 py-3.5 rounded-full font-semibold text-white bg-purple-600 hover:bg-purple-700 transition-all shadow-lg shadow-purple-200">Continuar</button>
+              <button onClick={goBack} className={btnBack}>Atrás</button>
+              <button onClick={goNext} className={btnPrimary}>Continuar</button>
             </div>
           </div>
         )}
@@ -253,32 +253,57 @@ export default function Home() {
             <h2 className="font-[family-name:var(--font-heading)] font-bold text-[22px]">Detalles adicionales</h2>
             <StepDetails formData={formData} onChange={(f, v) => updateForm({ [f]: v })} />
             <div className="flex gap-3">
-              <button onClick={goBack} className="px-4 py-3 text-gray-500 hover:text-purple-600 font-medium">Atr\u00e1s</button>
-              <button onClick={goNext} className="flex-1 py-3.5 rounded-full font-semibold text-white bg-purple-600 hover:bg-purple-700 transition-all shadow-lg shadow-purple-200">Continuar</button>
+              <button onClick={goBack} className={btnBack}>Atrás</button>
+              <button onClick={goNext} className={btnPrimary}>Continuar</button>
             </div>
           </div>
         )}
 
-        {/* Step 4: Datos personales */}
+        {/* Step 4: Datos de contacto → CREA EL LEAD */}
         {currentStep === 4 && (
           <div className="space-y-5">
-            <h2 className="font-[family-name:var(--font-heading)] font-bold text-[22px]">\u00bfA d\u00f3nde enviamos tu resultado?</h2>
+            <h2 className="font-[family-name:var(--font-heading)] font-bold text-[22px]">¿A dónde enviamos tu resultado?</h2>
             <StepContact formData={formData} onChange={(f, v) => updateForm({ [f]: v })} />
             <div className="flex gap-3">
-              <button onClick={goBack} className="px-4 py-3 text-gray-500 hover:text-purple-600 font-medium">Atr\u00e1s</button>
-              <button onClick={onSubmit} className="flex-1 py-3.5 rounded-full font-semibold text-white bg-purple-600 hover:bg-purple-700 transition-all shadow-lg shadow-purple-200">Ver mi resultado</button>
+              <button onClick={goBack} className={btnBack}>Atrás</button>
+              <button onClick={onSubmit} className={btnPrimary}>Ver mi resultado</button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 5: Complementarias (post-registro, opcional) */}
+        {currentStep === 5 && (
+          <div className="space-y-5">
+            <div>
+              <h2 className="font-[family-name:var(--font-heading)] font-bold text-[22px]">Información complementaria</h2>
+              <p className="text-[15px] text-gray-400 mt-1">Opcional — estos datos nos ayudan a darte un mejor servicio</p>
+            </div>
+            <StepComplementary formData={formData} onChange={(f, v) => updateForm({ [f]: v })} />
+            <div className="flex gap-3">
+              <button onClick={() => setCurrentStep(6)} className={btnSkip}>Omitir</button>
+              <button onClick={() => setCurrentStep(6)} className={btnPrimary}>Continuar</button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 6: Exit poll (post-registro, opcional) */}
+        {currentStep === 6 && (
+          <div className="space-y-5">
+            <div>
+              <h2 className="font-[family-name:var(--font-heading)] font-bold text-[22px]">Una última pregunta</h2>
+              <p className="text-[15px] text-gray-400 mt-1">Opcional — nos ayuda a entender mejor tus necesidades</p>
+            </div>
+            <StepExitPoll formData={formData} onChange={(f, v) => updateForm({ [f]: v })} />
+            <div className="flex gap-3">
+              <button onClick={finishForm} className={btnSkip}>Omitir y ver resultado</button>
+              <button onClick={finishForm} className={btnPrimary}>Ver mi resultado</button>
             </div>
           </div>
         )}
       </div>
 
-      {/* Result cards - always visible */}
-      <ResultCards
-        georef={apiState.georef}
-        pois={apiState.pois}
-        medianZone={apiState.medianZone}
-        address={formData.address}
-      />
+      {/* Result cards — always visible */}
+      <ResultCards georef={apiState.georef} pois={apiState.pois} medianZone={apiState.medianZone} address={formData.address} />
     </main>
   );
 }

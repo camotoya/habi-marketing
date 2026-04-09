@@ -68,6 +68,7 @@ export default function StepCatastral({ catastral, propertyType, project, onSele
           <select
             value={selectedTorre}
             onChange={(e) => setSelectedTorre(Number(e.target.value))}
+            aria-label="Torre"
             className="w-full border-2 border-gray-200 rounded-xl px-3.5 py-3 text-[16px] bg-white focus:border-purple-600 focus:outline-none transition-colors"
           >
             {catastral.torres.map((t, i) => (
@@ -84,6 +85,7 @@ export default function StepCatastral({ catastral, propertyType, project, onSele
           <select
             defaultValue=""
             onChange={(e) => handleUnitChange(e.target.value)}
+            aria-label="Selecciona tu unidad"
             className="w-full border-2 border-gray-200 rounded-xl px-3.5 py-3 text-[16px] bg-white focus:border-purple-600 focus:outline-none transition-colors"
           >
             <option value="" disabled>Selecciona apartamento</option>

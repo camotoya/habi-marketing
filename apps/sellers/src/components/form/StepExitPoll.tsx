@@ -27,8 +27,8 @@ export default function StepExitPoll({ formData, onChange }: Props) {
 
       {/* Tiempo esperado de venta */}
       <div>
-        <label className="block text-[16px] font-medium text-gray-600 mb-1">¿En cuánto tiempo esperas vender?</label>
-        <div className="grid grid-cols-4 gap-2">
+        <label className="block text-[16px] font-medium text-gray-600 mb-1" id="sale-time-label">¿En cuánto tiempo esperas vender?</label>
+        <div className="grid grid-cols-4 gap-2" role="group" aria-labelledby="sale-time-label">
           {[
             { label: '1 mes', value: 1 },
             { label: '3 meses', value: 3 },
@@ -57,6 +57,7 @@ export default function StepExitPoll({ formData, onChange }: Props) {
           placeholder="Meses"
           min={0}
           max={120}
+          aria-label="Número de meses para vender"
           className="w-32 px-4 py-3 border-2 border-gray-200 rounded-xl text-[16px] outline-none transition-colors focus:border-purple-600 mt-1"
         />
       </div>

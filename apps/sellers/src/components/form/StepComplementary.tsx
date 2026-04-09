@@ -42,6 +42,7 @@ export default function StepComplementary({ formData, onChange }: Props) {
             value={formData.askPrice || ''}
             onChange={e => onChange('askPrice', Number(e.target.value))}
             placeholder="Ej: 350000000"
+            aria-label="Precio esperado en pesos"
             className="w-full pl-8 pr-4 py-3 border-2 border-gray-200 rounded-xl text-[16px] outline-none transition-colors focus:border-purple-600"
           />
         </div>
@@ -50,8 +51,8 @@ export default function StepComplementary({ formData, onChange }: Props) {
 
       {/* Hipoteca */}
       <div>
-        <label className="block text-[16px] font-medium text-gray-600 mb-2">¿Tu inmueble tiene hipoteca vigente?</label>
-        <div className="flex gap-2">
+        <label className="block text-[16px] font-medium text-gray-600 mb-2" id="mortgage-label">¿Tu inmueble tiene hipoteca vigente?</label>
+        <div className="flex gap-2" role="group" aria-labelledby="mortgage-label">
           {[{ label: 'Sí', value: 1 }, { label: 'No', value: 0 }].map(opt => (
             <button
               key={opt.value}
@@ -72,8 +73,8 @@ export default function StepComplementary({ formData, onChange }: Props) {
 
       {/* Tipo de parqueadero */}
       <div>
-        <label className="block text-[16px] font-medium text-gray-600 mb-2">Tipo de parqueadero</label>
-        <div className="flex gap-2">
+        <label className="block text-[16px] font-medium text-gray-600 mb-2" id="parking-label">Tipo de parqueadero</label>
+        <div className="flex gap-2" role="group" aria-labelledby="parking-label">
           {[{ label: 'Privado', value: 'privado' }, { label: 'Comunal', value: 'comunal' }, { label: 'Sin parqueadero', value: 'sin' }].map(opt => (
             <button
               key={opt.value}

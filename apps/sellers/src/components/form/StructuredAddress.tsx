@@ -20,6 +20,7 @@ export default function StructuredAddress({ tipoVia, num1, num2, num3, address, 
         <select
           value={tipoVia}
           onChange={e => onChange('tipoVia', e.target.value)}
+          aria-label="Tipo de vía"
           className="w-[110px] shrink-0 px-2 py-3 border-2 border-gray-200 rounded-xl text-[16px] outline-none bg-white transition-colors focus:border-purple-600 appearance-none"
         >
           <option value="" disabled>V\u00eda</option>
@@ -33,6 +34,7 @@ export default function StructuredAddress({ tipoVia, num1, num2, num3, address, 
           onChange={e => onChange('num1', e.target.value)}
           placeholder="127 c bis"
           maxLength={15}
+          aria-label="Número de vía"
           className="w-[110px] shrink-0 px-2 py-3 border-2 border-gray-200 rounded-xl text-[16px] text-center outline-none transition-colors focus:border-purple-600"
         />
         <span className="text-lg font-bold text-gray-400 shrink-0">#</span>
@@ -42,6 +44,7 @@ export default function StructuredAddress({ tipoVia, num1, num2, num3, address, 
           onChange={e => onChange('num2', e.target.value)}
           placeholder="78"
           maxLength={10}
+          aria-label="Número cruce"
           className="w-[65px] shrink-0 px-2 py-3 border-2 border-gray-200 rounded-xl text-[16px] text-center outline-none transition-colors focus:border-purple-600"
         />
         <span className="text-lg font-bold text-gray-400 shrink-0">-</span>
@@ -51,6 +54,7 @@ export default function StructuredAddress({ tipoVia, num1, num2, num3, address, 
           onChange={e => onChange('num3', e.target.value)}
           placeholder="97"
           maxLength={5}
+          aria-label="Número complemento"
           className="w-[50px] shrink-0 px-2 py-3 border-2 border-gray-200 rounded-xl text-[16px] text-center outline-none transition-colors focus:border-purple-600"
         />
       </div>

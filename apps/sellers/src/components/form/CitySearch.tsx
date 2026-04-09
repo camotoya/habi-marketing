@@ -36,6 +36,9 @@ export default function CitySearch({ cities, value, onChange }: Props) {
           type="text"
           className="w-full px-3.5 py-3 border-2 border-gray-200 rounded-xl text-[16px] outline-none transition-colors focus:border-purple-600 focus:ring-2 focus:ring-purple-100"
           placeholder="Escribe o selecciona tu ciudad"
+          aria-label="Ciudad"
+          aria-expanded={open}
+          aria-controls="city-search-listbox"
           value={query}
           autoComplete="off"
           onFocus={() => setOpen(true)}
@@ -47,7 +50,7 @@ export default function CitySearch({ cities, value, onChange }: Props) {
           }}
         />
         {open && (
-          <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-20 max-h-[280px] overflow-y-auto">
+          <div id="city-search-listbox" role="listbox" aria-label="Ciudades disponibles" className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-20 max-h-[280px] overflow-y-auto">
             {filtered.length === 0 ? (
               <div className="px-3.5 py-3 text-sm text-gray-400">No se encontraron ciudades</div>
             ) : (
@@ -60,6 +63,8 @@ export default function CitySearch({ cities, value, onChange }: Props) {
                   <button
                     key={cId || cName}
                     type="button"
+                    role="option"
+                    aria-selected={isActive}
                     className={cn(
                       'block w-full text-left px-3.5 py-2.5 text-sm hover:bg-purple-50 transition-colors',
                       isActive && 'bg-purple-50 text-purple-700 font-semibold'

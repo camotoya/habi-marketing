@@ -1,12 +1,13 @@
 'use client';
 import { useState } from 'react';
-import Image from 'next/image';
+
+const BASE = '/habi-marketing';
 
 const NAV_ITEMS = [
-  { id: 'vender', label: 'Vender', href: '/vender' },
-  { id: 'comprar', label: 'Comprar', href: '/comprar' },
-  { id: 'broker', label: 'Soy Broker', href: '/broker' },
-  { id: 'cuanto', label: '¿Cuánto cuesta mi vivienda?', href: '/cuanto-cuesta' },
+  { id: 'vender', label: 'Vender', href: `${BASE}/` },
+  { id: 'comprar', label: 'Comprar', href: `${BASE}/` },
+  { id: 'broker', label: 'Soy Broker', href: `${BASE}/broker` },
+  { id: 'cuanto', label: '¿Cuánto cuesta mi vivienda?', href: `${BASE}/` },
 ];
 
 export default function Header() {
@@ -18,17 +19,16 @@ export default function Header() {
         Ir al contenido principal
       </a>
       <div className="mx-auto max-w-[1200px] px-4 sm:px-6 py-4 flex items-center justify-between">
-        <a href="/">
-          <Image src="/logo-habi.png" alt="Habi" width={128} height={36} className="h-10 w-auto" priority />
+        <a href={`${BASE}/`}>
+          <img src={`${BASE}/logo-habi.png`} alt="Habi" className="h-10 w-auto" />
         </a>
         <nav role="navigation" aria-label="Navegación principal" className="hidden md:flex items-center gap-1">
           {NAV_ITEMS.map(item => (
-            <a key={item.id} href={item.href} aria-current={typeof window !== 'undefined' && window.location.pathname === item.href ? 'page' : undefined} className="px-4 py-2 rounded-full text-[15px] font-medium text-gray-600 hover:text-purple-700 hover:bg-purple-50 transition-all focus:outline-none focus:ring-2 focus:ring-purple-500">
+            <a key={item.id} href={item.href} className="px-4 py-2 rounded-full text-[15px] font-medium text-gray-600 hover:text-purple-700 hover:bg-purple-50 transition-all focus:outline-none focus:ring-2 focus:ring-purple-500">
               {item.label}
             </a>
           ))}
         </nav>
-        {/* Mobile hamburger */}
         <button
           className="md:hidden p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-lg"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -45,15 +45,10 @@ export default function Header() {
           </svg>
         </button>
       </div>
-      {/* Mobile menu */}
       {menuOpen && (
         <nav id="mobile-menu" role="navigation" aria-label="Navegación móvil" className="md:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-1">
           {NAV_ITEMS.map(item => (
-            <a
-              key={item.id}
-              href={item.href}
-              className="block px-4 py-2.5 rounded-lg text-[15px] font-medium text-gray-600 hover:text-purple-700 hover:bg-purple-50 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            >
+            <a key={item.id} href={item.href} className="block px-4 py-2.5 rounded-lg text-[15px] font-medium text-gray-600 hover:text-purple-700 hover:bg-purple-50 focus:outline-none focus:ring-2 focus:ring-purple-500">
               {item.label}
             </a>
           ))}

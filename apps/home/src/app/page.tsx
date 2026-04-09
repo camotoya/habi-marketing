@@ -9,31 +9,31 @@ const PRODUCTS = [
     icon: '⚡', title: 'Vende en 10 días', subtitle: 'Market Maker',
     description: 'Te compramos tu inmueble directamente. Recibe una oferta y ten tu dinero en efectivo en tiempo récord.',
     highlights: ['Pago en 10 días', 'Sin intermediarios', 'Oferta garantizada'],
-    cta: 'Quiero vender rápido', href: '/vender', gradient: 'from-purple-600 to-purple-800',
+    cta: 'Quiero vender rápido', href: '/habi-marketing/', gradient: 'from-purple-600 to-purple-800',
   },
   {
     icon: '🏘️', title: 'Vende con +4,000 brokers', subtitle: 'Inmobiliaria',
     description: 'Publicamos tu inmueble en la red de brokers más grande del país. Tú pones el precio, nosotros encontramos al comprador.',
     highlights: ['Mejor precio del mercado', 'Red de +4,000 brokers', 'Acompañamiento completo'],
-    cta: 'Quiero vender con Habi', href: '/vender', gradient: 'from-teal-500 to-teal-600',
+    cta: 'Quiero vender con Habi', href: '/habi-marketing/', gradient: 'from-teal-500 to-teal-600',
   },
   {
     icon: '🔑', title: 'Compra tu inmueble ideal', subtitle: 'Inventario',
     description: 'Explora el mejor inventario inmobiliario del país. Apartamentos y casas verificados, con toda la información que necesitas.',
     highlights: ['Inventario verificado', 'Fotos profesionales', 'Asesoría gratuita'],
-    cta: 'Ver propiedades', href: '/comprar', gradient: 'from-blue-500 to-blue-700',
+    cta: 'Ver propiedades', href: '/habi-marketing/', gradient: 'from-blue-500 to-blue-700',
   },
   {
     icon: '💬', title: 'Recibe asesoría inmobiliaria', subtitle: 'Asesoría',
     description: 'Nuestro equipo de expertos te acompaña en cada paso de tu decisión inmobiliaria. Sin compromiso.',
     highlights: ['Expertos certificados', 'Sin costo', 'Personalizada'],
-    cta: 'Hablar con un asesor', href: '/asesoria', gradient: 'from-orange-400 to-orange-600',
+    cta: 'Hablar con un asesor', href: '/habi-marketing/asesoria', gradient: 'from-orange-400 to-orange-600',
   },
   {
     icon: '🏦', title: 'Encuentra tu crédito hipotecario', subtitle: 'Crédito',
     description: 'Comparamos las mejores opciones de crédito hipotecario para que encuentres la tasa y el plazo ideal.',
     highlights: ['Múltiples bancos', 'Mejores tasas', 'Pre-aprobación rápida'],
-    cta: 'Simular crédito', href: '/credito', gradient: 'from-emerald-500 to-emerald-700',
+    cta: 'Simular crédito', href: '/habi-marketing/credito', gradient: 'from-emerald-500 to-emerald-700',
   },
 ];
 
@@ -152,8 +152,8 @@ export default function Home() {
           <h2 className="font-[family-name:var(--font-heading)] font-bold text-3xl sm:text-4xl text-white mb-4">¿Listo para dar el siguiente paso?</h2>
           <p className="text-purple-200 text-lg mb-8 max-w-xl mx-auto">Sea cual sea tu necesidad inmobiliaria, estamos aquí para ayudarte.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="/vender" className="px-8 py-4 rounded-full bg-white text-purple-700 font-semibold text-[16px] hover:bg-purple-50 transition-all shadow-lg focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-purple-700">Quiero vender</a>
-            <a href="/comprar" className="px-8 py-4 rounded-full border-2 border-white text-white font-semibold text-[16px] hover:bg-white/10 transition-all focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-purple-700">Quiero comprar</a>
+            <a href="/habi-marketing/" className="px-8 py-4 rounded-full bg-white text-purple-700 font-semibold text-[16px] hover:bg-purple-50 transition-all shadow-lg focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-purple-700">Quiero vender</a>
+            <a href="/habi-marketing/" className="px-8 py-4 rounded-full border-2 border-white text-white font-semibold text-[16px] hover:bg-white/10 transition-all focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-purple-700">Quiero comprar</a>
           </div>
         </div>
       </section>

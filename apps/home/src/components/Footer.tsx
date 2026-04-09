@@ -1,10 +1,11 @@
 'use client';
-import Image from 'next/image';
+
+const BASE = '/habi-marketing';
 
 const FOOTER_COLS = [
-  { title: 'Vender', links: [{ label: 'Vende en 10 días', href: '/vender' }, { label: 'Vende con brokers', href: '/vender' }, { label: '¿Cuánto vale mi casa?', href: '/cuanto-cuesta' }, { label: 'Proceso de venta', href: '#' }] },
-  { title: 'Comprar', links: [{ label: 'Ver propiedades', href: '/comprar' }, { label: 'Apartamentos en Bogotá', href: '/comprar' }, { label: 'Casas en Medellín', href: '/comprar' }, { label: 'Crédito hipotecario', href: '/credito' }] },
-  { title: 'Empresa', links: [{ label: 'Sobre nosotros', href: '#' }, { label: 'Blog', href: '#' }, { label: 'Trabaja con nosotros', href: '#' }, { label: 'Soy Broker', href: '/broker' }] },
+  { title: 'Vender', links: [{ label: 'Vende en 10 días', href: `${BASE}/` }, { label: 'Vende con brokers', href: `${BASE}/` }, { label: '¿Cuánto vale mi casa?', href: `${BASE}/` }, { label: 'Proceso de venta', href: '#' }] },
+  { title: 'Comprar', links: [{ label: 'Ver propiedades', href: `${BASE}/` }, { label: 'Apartamentos en Bogotá', href: `${BASE}/` }, { label: 'Casas en Medellín', href: `${BASE}/` }, { label: 'Crédito hipotecario', href: `${BASE}/credito` }] },
+  { title: 'Empresa', links: [{ label: 'Sobre nosotros', href: '#' }, { label: 'Blog', href: '#' }, { label: 'Trabaja con nosotros', href: '#' }, { label: 'Soy Broker', href: `${BASE}/broker` }] },
   { title: 'Legal', links: [{ label: 'Términos y condiciones', href: '#' }, { label: 'Política de privacidad', href: '#' }, { label: 'Política de cookies', href: '#' }, { label: 'PQRS', href: '#' }] },
 ];
 
@@ -34,12 +35,12 @@ export default function Footer() {
         </div>
         <div className="border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <Image src="/logo-habi.png" alt="Habi" width={80} height={22} className="h-6 w-auto brightness-0 invert opacity-50" />
+            <img src={`${BASE}/logo-habi.png`} alt="Habi" className="h-6 w-auto brightness-0 invert opacity-50" />
             <p className="text-[12px] text-gray-500">&copy; {new Date().getFullYear()} Habi. Todos los derechos reservados.</p>
           </div>
           <div className="flex items-center gap-4">
             {['Instagram', 'Facebook', 'YouTube', 'LinkedIn'].map(s => (
-              <a key={s} href="#" aria-label={`Habi en ${s}`} className="text-[12px] text-gray-500 hover:text-white transition-colors">{`Habi en ${s}`}</a>
+              <a key={s} href="#" aria-label={`Habi en ${s}`} className="text-[12px] text-gray-500 hover:text-white transition-colors">Habi en {s}</a>
             ))}
           </div>
         </div>

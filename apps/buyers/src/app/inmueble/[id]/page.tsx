@@ -35,10 +35,10 @@ function Header() {
         <Link href="/">
           <Image src="/logo-habi.png" alt="Habi" width={128} height={36} className="h-10 w-auto" priority />
         </Link>
-        <nav className="hidden md:flex items-center gap-1">
-          <a href="/vender" className="px-4 py-2 rounded-full text-[15px] font-medium text-gray-600 hover:text-purple-700 hover:bg-purple-50 transition-all">Vender</a>
-          <a href="/" className="px-4 py-2 rounded-full text-[15px] font-medium text-purple-700 bg-purple-50">Comprar</a>
-          <a href="/broker" className="px-4 py-2 rounded-full text-[15px] font-medium text-gray-600 hover:text-purple-700 hover:bg-purple-50 transition-all">Soy Broker</a>
+        <nav role="navigation" aria-label="Navegación principal" className="hidden md:flex items-center gap-1">
+          <a href="/vender" className="px-4 py-2 rounded-full text-[15px] font-medium text-gray-600 hover:text-purple-700 hover:bg-purple-50 transition-all focus:outline-none focus:ring-2 focus:ring-purple-500">Vender</a>
+          <a href="/" aria-current="page" className="px-4 py-2 rounded-full text-[15px] font-medium text-purple-700 bg-purple-50 focus:outline-none focus:ring-2 focus:ring-purple-500">Comprar</a>
+          <a href="/broker" className="px-4 py-2 rounded-full text-[15px] font-medium text-gray-600 hover:text-purple-700 hover:bg-purple-50 transition-all focus:outline-none focus:ring-2 focus:ring-purple-500">Soy Broker</a>
         </nav>
       </div>
     </header>
@@ -90,6 +90,7 @@ function ImageGallery({ images }: { images: Property['images'] }) {
             <button
               key={i}
               onClick={() => setActiveIdx(i)}
+              aria-label={`Ver foto ${i + 1}`}
               className={`relative w-20 h-16 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${
                 i === activeIdx ? 'border-purple-600' : 'border-transparent hover:border-gray-300'
               }`}
@@ -206,8 +207,47 @@ export default function PropertyDetailPage() {
   // TODO: Fetch from API using propertyId
   const property = { ...PLACEHOLDER, id: propertyId };
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'RealEstateListing',
+    name: property.titulo,
+    description: `${property.inventory_type_id === 2 ? 'Casa' : 'Apartamento'} en ${property.barrio}. ${property.habitaciones} habitaciones, ${property.banos} baños, ${property.area} m².`,
+    url: `https://habi.co/comprar/inmueble/${property.id}`,
+    datePosted: new Date().toISOString(),
+    offers: {
+      '@type': 'Offer',
+      price: property.precio,
+      priceCurrency: 'COP',
+      availability: 'https://schema.org/InStock',
+    },
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: property.direccion,
+      addressLocality: property.barrio,
+      addressCountry: 'CO',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: property.ubicacion_lat,
+      longitude: property.ubicacion_lng,
+    },
+    numberOfRooms: property.habitaciones,
+    floorSize: {
+      '@type': 'QuantitativeValue',
+      value: property.area,
+      unitCode: 'MTK',
+    },
+    ...(property.images.length > 0 && {
+      image: property.images.map((img) => img.url + '-765'),
+    }),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
 
       <main className="mx-auto max-w-[1200px] px-4 sm:px-6 py-6 sm:py-8">
@@ -405,7 +445,7 @@ export default function PropertyDetailPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 pt-12 pb-8 mt-12">
+      <footer role="contentinfo" className="bg-gray-900 text-gray-400 pt-12 pb-8 mt-12">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -416,8 +456,8 @@ export default function PropertyDetailPage() {
             </div>
             <div className="flex items-center gap-4">
               {['Instagram', 'Facebook', 'YouTube', 'LinkedIn'].map(s => (
-                <a key={s} href="#" className="text-[12px] text-gray-500 hover:text-white transition-colors">
-                  {s}
+                <a key={s} href="#" aria-label={`Habi en ${s}`} className="text-[12px] text-gray-500 hover:text-white transition-colors">
+                  {`Habi en ${s}`}
                 </a>
               ))}
             </div>

@@ -33,6 +33,7 @@ function SelectField({
       <select
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
+        aria-label={label}
         className={inputBase}
       >
         {options.map((o) => (

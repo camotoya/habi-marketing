@@ -16,13 +16,15 @@ interface Props {
 export default function PropertyTypeSelector({ value, onChange }: Props) {
   return (
     <div>
-      <label className="block text-[16px] font-medium text-gray-600 mb-2">Tipo de inmueble</label>
-      <div className="grid grid-cols-2 gap-2">
+      <label className="block text-[16px] font-medium text-gray-600 mb-2" id="property-type-label">Tipo de inmueble</label>
+      <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-labelledby="property-type-label">
         {TYPES.map(t => (
           <button
             key={t.value}
             type="button"
             onClick={() => onChange(t.value)}
+            role="radio"
+            aria-checked={value === t.value}
             className={cn(
               'flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all text-[16px] font-medium',
               'sm:flex-row flex-col',

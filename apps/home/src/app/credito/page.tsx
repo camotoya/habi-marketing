@@ -152,13 +152,13 @@ export default function CreditoPage() {
                   Recibe asesoría de crédito
                 </h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <input type="text" placeholder="Nombre completo" required
+                  <input type="text" placeholder="Nombre completo" required aria-label="Nombre completo"
                     className="w-full px-4 py-3 text-[16px] border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none transition-colors" />
-                  <input type="email" placeholder="Correo electrónico" required
+                  <input type="email" placeholder="Correo electrónico" required aria-label="Correo electrónico"
                     className="w-full px-4 py-3 text-[16px] border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none transition-colors" />
-                  <input type="tel" placeholder="Teléfono" required
+                  <input type="tel" placeholder="Teléfono" required aria-label="Teléfono"
                     className="w-full px-4 py-3 text-[16px] border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none transition-colors" />
-                  <input type="number" placeholder="Valor del inmueble que buscas" min={0}
+                  <input type="number" placeholder="Valor del inmueble que buscas" min={0} aria-label="Valor del inmueble que buscas"
                     className="w-full px-4 py-3 text-[16px] border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none transition-colors" />
                   <button type="submit"
                     className="w-full py-3 rounded-xl bg-purple-600 text-white font-semibold text-[16px] hover:bg-purple-700 transition-colors">

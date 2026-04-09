@@ -34,6 +34,7 @@ export default function StepContact({ formData, onChange }: Props) {
           placeholder="Tu nombre"
           value={formData.name}
           onChange={(e) => onChange('name', e.target.value)}
+          aria-required="true"
           className={inputBase}
         />
       </div>
@@ -49,6 +50,7 @@ export default function StepContact({ formData, onChange }: Props) {
             placeholder="tu@email.com"
             value={formData.email}
             onChange={(e) => onChange('email', e.target.value)}
+            aria-required="true"
             className={inputBase}
           />
         </div>
@@ -59,6 +61,7 @@ export default function StepContact({ formData, onChange }: Props) {
             placeholder="300 123 4567"
             value={formData.phone}
             onChange={(e) => onChange('phone', e.target.value)}
+            aria-required="true"
             className={inputBase}
           />
         </div>

@@ -97,13 +97,13 @@ export default function AsesoriaPage() {
                   Solicita tu asesoría
                 </h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <input type="text" placeholder="Nombre completo" required
+                  <input type="text" placeholder="Nombre completo" required aria-label="Nombre completo"
                     className="w-full px-4 py-3 text-[16px] border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors" />
-                  <input type="email" placeholder="Correo electrónico" required
+                  <input type="email" placeholder="Correo electrónico" required aria-label="Correo electrónico"
                     className="w-full px-4 py-3 text-[16px] border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors" />
-                  <input type="tel" placeholder="Teléfono" required
+                  <input type="tel" placeholder="Teléfono" required aria-label="Teléfono"
                     className="w-full px-4 py-3 text-[16px] border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors" />
-                  <textarea placeholder="¿En qué podemos ayudarte?" rows={4}
+                  <textarea placeholder="¿En qué podemos ayudarte?" rows={4} aria-label="¿En qué podemos ayudarte?"
                     className="w-full px-4 py-3 text-[16px] border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors resize-none" />
                   <button type="submit"
                     className="w-full py-3 rounded-xl bg-purple-600 text-white font-semibold text-[16px] hover:bg-purple-700 transition-colors">
@@ -127,6 +127,7 @@ export default function AsesoriaPage() {
               <div key={i} className="border border-gray-200 rounded-xl overflow-hidden">
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  aria-expanded={openFaq === i}
                   className="w-full flex items-center justify-between px-6 py-4 text-left"
                 >
                   <span className="font-semibold text-[16px] text-gray-900">{faq.q}</span>

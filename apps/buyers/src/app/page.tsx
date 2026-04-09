@@ -60,12 +60,13 @@ function Header() {
         <Link href="/">
           <Image src="/logo-habi.png" alt="Habi" width={128} height={36} className="h-10 w-auto" priority />
         </Link>
-        <nav className="hidden md:flex items-center gap-1">
+        <nav role="navigation" aria-label="Navegación principal" className="hidden md:flex items-center gap-1">
           {NAV_ITEMS.map(item => (
             <a
               key={item.id}
               href={item.href}
-              className={`px-4 py-2 rounded-full text-[15px] font-medium transition-all ${
+              aria-current={item.id === 'comprar' ? 'page' : undefined}
+              className={`px-4 py-2 rounded-full text-[15px] font-medium transition-all focus:outline-none focus:ring-2 focus:ring-purple-500 ${
                 item.id === 'comprar'
                   ? 'text-purple-700 bg-purple-50'
                   : 'text-gray-600 hover:text-purple-700 hover:bg-purple-50'
@@ -77,9 +78,11 @@ function Header() {
         </nav>
         {/* Mobile hamburger */}
         <button
-          className="md:hidden p-2 text-gray-600"
+          className="md:hidden p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-lg"
           onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Menú"
+          aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu-buyers"
         >
           <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             {menuOpen ? (
@@ -92,17 +95,17 @@ function Header() {
       </div>
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-1">
+        <nav id="mobile-menu-buyers" role="navigation" aria-label="Navegación móvil" className="md:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-1">
           {NAV_ITEMS.map(item => (
             <a
               key={item.id}
               href={item.href}
-              className="block px-4 py-2.5 rounded-lg text-[15px] font-medium text-gray-600 hover:text-purple-700 hover:bg-purple-50"
+              className="block px-4 py-2.5 rounded-lg text-[15px] font-medium text-gray-600 hover:text-purple-700 hover:bg-purple-50 focus:outline-none focus:ring-2 focus:ring-purple-500"
             >
               {item.label}
             </a>
           ))}
-        </div>
+        </nav>
       )}
     </header>
   );
@@ -145,7 +148,7 @@ const FOOTER_COLS = [
 
 function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-400 pt-16 pb-8">
+    <footer role="contentinfo" className="bg-gray-900 text-gray-400 pt-16 pb-8">
       <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {FOOTER_COLS.map(col => (
@@ -172,8 +175,8 @@ function Footer() {
           </div>
           <div className="flex items-center gap-4">
             {['Instagram', 'Facebook', 'YouTube', 'LinkedIn'].map(s => (
-              <a key={s} href="#" className="text-[12px] text-gray-500 hover:text-white transition-colors">
-                {s}
+              <a key={s} href="#" aria-label={`Habi en ${s}`} className="text-[12px] text-gray-500 hover:text-white transition-colors">
+                {`Habi en ${s}`}
               </a>
             ))}
           </div>
@@ -292,6 +295,7 @@ function FiltersBar({
           <label className="block text-[12px] font-semibold text-gray-500 uppercase tracking-wide mb-1">Ciudad</label>
           <select
             className={selectClass}
+            aria-label="Ciudad"
             value={filters.city}
             onChange={e => onChange({ ...filters, city: e.target.value })}
           >
@@ -306,6 +310,7 @@ function FiltersBar({
           <label className="block text-[12px] font-semibold text-gray-500 uppercase tracking-wide mb-1">Tipo</label>
           <select
             className={selectClass}
+            aria-label="Tipo de inmueble"
             value={filters.type}
             onChange={e => onChange({ ...filters, type: e.target.value })}
           >
@@ -320,6 +325,7 @@ function FiltersBar({
           <label className="block text-[12px] font-semibold text-gray-500 uppercase tracking-wide mb-1">Habitaciones</label>
           <select
             className={selectClass}
+            aria-label="Habitaciones"
             value={filters.bedrooms}
             onChange={e => onChange({ ...filters, bedrooms: e.target.value })}
           >
@@ -335,6 +341,7 @@ function FiltersBar({
           <input
             type="number"
             className={inputClass}
+            aria-label="Precio mínimo"
             placeholder="Ej: 200000000"
             value={filters.priceMin}
             onChange={e => onChange({ ...filters, priceMin: e.target.value })}
@@ -347,6 +354,7 @@ function FiltersBar({
           <input
             type="number"
             className={inputClass}
+            aria-label="Precio máximo"
             placeholder="Ej: 800000000"
             value={filters.priceMax}
             onChange={e => onChange({ ...filters, priceMax: e.target.value })}
@@ -359,6 +367,7 @@ function FiltersBar({
           <input
             type="number"
             className={inputClass}
+            aria-label="Área mínima en metros cuadrados"
             placeholder="Ej: 50"
             value={filters.areaMin}
             onChange={e => onChange({ ...filters, areaMin: e.target.value })}
@@ -395,7 +404,8 @@ function Pagination({
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-3 py-2 rounded-lg text-[14px] font-medium text-gray-500 hover:bg-white hover:text-purple-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+        aria-label="Página anterior"
+        className="px-3 py-2 rounded-lg text-[14px] font-medium text-gray-500 hover:bg-white hover:text-purple-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all focus:outline-none focus:ring-2 focus:ring-purple-500"
       >
         Anterior
       </button>
@@ -419,7 +429,8 @@ function Pagination({
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-3 py-2 rounded-lg text-[14px] font-medium text-gray-500 hover:bg-white hover:text-purple-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+        aria-label="Página siguiente"
+        className="px-3 py-2 rounded-lg text-[14px] font-medium text-gray-500 hover:bg-white hover:text-purple-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all focus:outline-none focus:ring-2 focus:ring-purple-500"
       >
         Siguiente
       </button>
@@ -465,6 +476,7 @@ export default function BuyersListingPage() {
       <Header />
 
       {/* Hero */}
+      <main id="main-content" role="main">
       <section className="bg-gradient-to-br from-[#7C01FF] via-[#5A00CC] to-[#3D0099] text-white py-12 sm:py-16 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-white/10 -translate-y-1/2 translate-x-1/3" />
@@ -516,6 +528,7 @@ export default function BuyersListingPage() {
         {/* Pagination */}
         <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
       </section>
+      </main>
 
       <Footer />
     </>

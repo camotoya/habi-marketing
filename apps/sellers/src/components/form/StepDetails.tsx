@@ -45,8 +45,8 @@ export default function StepDetails({ formData, onChange }: Props) {
           const active = data[field] === 1;
           return (
             <div key={field} className="space-y-1.5">
-              <label className="block text-[16px] font-medium text-gray-600">{label}</label>
-              <div className="flex gap-2">
+              <label className="block text-[16px] font-medium text-gray-600" id={`toggle-label-${field}`}>{label}</label>
+              <div className="flex gap-2" role="group" aria-labelledby={`toggle-label-${field}`}>
                 <button
                   type="button"
                   onClick={() => onChange(field, 1)}
@@ -96,6 +96,7 @@ export default function StepDetails({ formData, onChange }: Props) {
           <select
             value={formData.view}
             onChange={(e) => onChange('view', e.target.value)}
+            aria-label="Vista"
             className={inputBase}
           >
             {VIEW_OPTIONS.map((o) => (

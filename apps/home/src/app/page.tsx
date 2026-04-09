@@ -84,6 +84,7 @@ export default function Home() {
       <Header />
 
       {/* Hero */}
+      <main id="main-content" role="main">
       <section className="bg-gradient-to-br from-[#7C01FF] via-[#5A00CC] to-[#3D0099] text-white py-16 sm:py-24 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-white/10 -translate-y-1/2 translate-x-1/3" />
@@ -138,7 +139,7 @@ export default function Home() {
             </div>
             <div className="flex justify-center gap-2 mt-6">
               {TESTIMONIALS.map((_, i) => (
-                <button key={i} onClick={() => setActiveTestimonial(i)} className={`w-3 h-3 rounded-full transition-all ${i === activeTestimonial ? 'bg-purple-600 w-8' : 'bg-gray-300 hover:bg-gray-400'}`} />
+                <button key={i} onClick={() => setActiveTestimonial(i)} aria-label={`Ver testimonio ${i + 1} de ${TESTIMONIALS.length}`} className={`w-3 h-3 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${i === activeTestimonial ? 'bg-purple-600 w-8' : 'bg-gray-300 hover:bg-gray-400'}`} />
               ))}
             </div>
           </div>
@@ -151,11 +152,12 @@ export default function Home() {
           <h2 className="font-[family-name:var(--font-heading)] font-bold text-3xl sm:text-4xl text-white mb-4">¿Listo para dar el siguiente paso?</h2>
           <p className="text-purple-200 text-lg mb-8 max-w-xl mx-auto">Sea cual sea tu necesidad inmobiliaria, estamos aquí para ayudarte.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="/vender" className="px-8 py-4 rounded-full bg-white text-purple-700 font-semibold text-[16px] hover:bg-purple-50 transition-all shadow-lg">Quiero vender</a>
-            <a href="/comprar" className="px-8 py-4 rounded-full border-2 border-white text-white font-semibold text-[16px] hover:bg-white/10 transition-all">Quiero comprar</a>
+            <a href="/vender" className="px-8 py-4 rounded-full bg-white text-purple-700 font-semibold text-[16px] hover:bg-purple-50 transition-all shadow-lg focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-purple-700">Quiero vender</a>
+            <a href="/comprar" className="px-8 py-4 rounded-full border-2 border-white text-white font-semibold text-[16px] hover:bg-white/10 transition-all focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-purple-700">Quiero comprar</a>
           </div>
         </div>
       </section>
+      </main>
 
       <Footer />
     </>

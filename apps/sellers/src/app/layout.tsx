@@ -16,8 +16,17 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: 'Vender tu inmueble | Habi',
-  description: 'Vende tu casa o apartamento con Habi. Conoce el valor real de tu inmueble en minutos, gratis y en l\u00ednea.',
+  title: 'Vende tu inmueble | Habi — Avalúo gratuito en minutos',
+  description:
+    'Vende tu casa o apartamento con Habi. Conoce el valor real de tu inmueble en minutos, gratis y en línea. Oferta de compra directa en 10 días.',
+  keywords: ['vender casa', 'vender apartamento', 'avalúo gratis', 'compra directa', 'Habi', 'Colombia'],
+  openGraph: {
+    type: 'website',
+    locale: 'es_CO',
+    siteName: 'Habi',
+    title: 'Vende tu inmueble | Habi — Avalúo gratuito en minutos',
+    description: 'Vende tu casa o apartamento con Habi. Oferta de compra directa en 10 días.',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

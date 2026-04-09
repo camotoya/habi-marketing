@@ -12,7 +12,7 @@ const CITIES = ['Bogotá', 'Medellín', 'Cali', 'Barranquilla', 'Bucaramanga', '
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-400 pt-16 pb-8">
+    <footer role="contentinfo" className="bg-gray-900 text-gray-400 pt-16 pb-8">
       <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {FOOTER_COLS.map(col => (
@@ -39,7 +39,7 @@ export default function Footer() {
           </div>
           <div className="flex items-center gap-4">
             {['Instagram', 'Facebook', 'YouTube', 'LinkedIn'].map(s => (
-              <a key={s} href="#" className="text-[12px] text-gray-500 hover:text-white transition-colors">{s}</a>
+              <a key={s} href="#" aria-label={`Habi en ${s}`} className="text-[12px] text-gray-500 hover:text-white transition-colors">{`Habi en ${s}`}</a>
             ))}
           </div>
         </div>

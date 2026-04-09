@@ -41,6 +41,9 @@ function ViaSearch({ value, onChange }: { value: string; onChange: (v: string) =
         type="text"
         className="w-full px-2 py-3 border-2 border-gray-200 rounded-xl text-[16px] outline-none transition-colors focus:border-purple-600"
         placeholder="Tipo de v&#237;a"
+        aria-label="Tipo de vía"
+        aria-expanded={open}
+        aria-controls="via-listbox"
         value={query}
         autoComplete="off"
         onFocus={() => setOpen(true)}
@@ -51,7 +54,7 @@ function ViaSearch({ value, onChange }: { value: string; onChange: (v: string) =
         }}
       />
       {open && (
-        <div className="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-20 max-h-[250px] overflow-y-auto">
+        <div id="via-listbox" role="listbox" aria-label="Tipos de vía" className="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-20 max-h-[250px] overflow-y-auto">
           {filtered.length === 0 ? (
             <div className="px-3 py-3 text-[14px] text-gray-400">Sin resultados</div>
           ) : (
@@ -59,6 +62,8 @@ function ViaSearch({ value, onChange }: { value: string; onChange: (v: string) =
               <button
                 key={v}
                 type="button"
+                role="option"
+                aria-selected={v === value}
                 className={cn(
                   'block w-full text-left px-3 py-2.5 text-[15px] hover:bg-purple-50 transition-colors',
                   v === value && 'bg-purple-50 text-purple-700 font-semibold'
@@ -111,6 +116,9 @@ export default function CityAndAddress({
             type="text"
             className="w-full px-2 py-3 border-2 border-gray-200 rounded-xl text-[16px] outline-none transition-colors focus:border-purple-600"
             placeholder="Ciudad"
+            aria-label="Ciudad"
+            aria-expanded={open}
+            aria-controls="city-listbox"
             value={query}
             autoComplete="off"
             onFocus={() => setOpen(true)}
@@ -121,7 +129,7 @@ export default function CityAndAddress({
             }}
           />
           {open && (
-            <div className="absolute top-full left-0 w-[250px] mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-20 max-h-[280px] overflow-y-auto">
+            <div id="city-listbox" role="listbox" aria-label="Ciudades disponibles" className="absolute top-full left-0 w-[250px] mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-20 max-h-[280px] overflow-y-auto">
               {filtered.length === 0 ? (
                 <div className="px-3 py-3 text-[14px] text-gray-400">Sin resultados</div>
               ) : (
@@ -133,6 +141,8 @@ export default function CityAndAddress({
                     <button
                       key={cId || cName}
                       type="button"
+                      role="option"
+                      aria-selected={cName === cityValue}
                       className={cn(
                         'block w-full text-left px-3 py-2.5 text-[15px] hover:bg-purple-50 transition-colors',
                         cName === cityValue && 'bg-purple-50 text-purple-700 font-semibold'
@@ -160,6 +170,7 @@ export default function CityAndAddress({
           value={num1}
           onChange={e => onAddressChange('num1', e.target.value)}
           placeholder="127c"
+          aria-label="Número de vía"
           maxLength={15}
           style={{ flex: 1.6, minWidth: 0 }}
           className="px-1 py-3 border-2 border-gray-200 rounded-xl text-[16px] text-center outline-none transition-colors focus:border-purple-600"
@@ -171,6 +182,7 @@ export default function CityAndAddress({
           value={num2}
           onChange={e => onAddressChange('num2', e.target.value)}
           placeholder="78"
+          aria-label="Número cruce"
           maxLength={10}
           style={{ flex: 1.2, minWidth: 0 }}
           className="px-1 py-3 border-2 border-gray-200 rounded-xl text-[16px] text-center outline-none transition-colors focus:border-purple-600"
@@ -182,6 +194,7 @@ export default function CityAndAddress({
           value={num3}
           onChange={e => onAddressChange('num3', e.target.value)}
           placeholder="97"
+          aria-label="Número complemento"
           maxLength={5}
           style={{ flex: 1.2, minWidth: 0 }}
           className="px-1 py-3 border-2 border-gray-200 rounded-xl text-[16px] text-center outline-none transition-colors focus:border-purple-600"

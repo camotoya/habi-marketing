@@ -115,15 +115,15 @@ export default function BrokerPage() {
                   Regístrate como broker
                 </h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <input type="text" placeholder="Nombre completo" required
+                  <input type="text" placeholder="Nombre completo" required aria-label="Nombre completo"
                     className="w-full px-4 py-3 text-[16px] border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors" />
-                  <input type="email" placeholder="Correo electrónico" required
+                  <input type="email" placeholder="Correo electrónico" required aria-label="Correo electrónico"
                     className="w-full px-4 py-3 text-[16px] border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors" />
-                  <input type="tel" placeholder="Teléfono" required
+                  <input type="tel" placeholder="Teléfono" required aria-label="Teléfono"
                     className="w-full px-4 py-3 text-[16px] border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors" />
-                  <input type="text" placeholder="Nombre de tu inmobiliaria o empresa"
+                  <input type="text" placeholder="Nombre de tu inmobiliaria o empresa" aria-label="Nombre de tu inmobiliaria o empresa"
                     className="w-full px-4 py-3 text-[16px] border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors" />
-                  <select required defaultValue=""
+                  <select required defaultValue="" aria-label="Selecciona tu ciudad"
                     className="w-full px-4 py-3 text-[16px] border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors text-gray-500">
                     <option value="" disabled>Selecciona tu ciudad</option>
                     {CITIES_LIST.map(c => (
